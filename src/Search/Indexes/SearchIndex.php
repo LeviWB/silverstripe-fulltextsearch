@@ -158,8 +158,10 @@ abstract class SearchIndex extends ViewableData
                             );
                         } elseif ($manyMany = $schema->manyManyComponent($className, $lookup)) {
                             // we only want to include base class for relation, omit classes that inherited the relation
-                            $relationList = Config::inst()->get($dataclass, 'many_many', Config::UNINHERITED);
-                            $relationList = (!is_null($relationList)) ? $relationList : [];
+                            $relationList = array_merge(
+                                Config::inst()->get($dataclass, 'many_many', Config::UNINHERITED) ?? [],
+                                Config::inst()->get($dataclass, 'belongs_many_many', Config::UNINHERITED) ?? [],
+                            );
                             if (!array_key_exists($lookup, $relationList ?? [])) {
                                 continue;
                             }
